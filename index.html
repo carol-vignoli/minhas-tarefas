@@ -182,6 +182,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="tab" onclick="switchTab('recorrentes',this)">Recorrentes</button>
   <button class="tab" onclick="switchTab('todas',this)">Todas</button>
   <button class="tab" onclick="switchTab('relatorio',this)">Relatório</button>
+  <button class="tab" onclick="switchTab('lixeira',this)">🗑 Lixeira</button>
 </div>
 
 <div id="main-area">
@@ -257,9 +258,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="action-sheet" id="action-sheet">
   <div class="action-sheet-inner">
     <div class="action-item" id="action-edit" onclick="editFromAction()">✎  Editar</div>
+    <div class="action-item" id="action-postpone" onclick="postponeFromAction()" style="display:none">📅  Adiar esta ocorrência</div>
     <div class="action-item" id="action-toggle" onclick="toggleFromAction()">✓  Marcar como feita</div>
     <div class="action-item danger" id="action-delete" onclick="deleteFromAction()">✕  Apagar</div>
     <div class="action-item action-cancel" onclick="closeAction()">Cancelar</div>
+  </div>
+</div>
+
+<div class="action-sheet" id="delete-recur-sheet">
+  <div class="action-sheet-inner">
+    <div style="padding:16px 0 8px;font-size:15px;font-weight:600;color:var(--text)">Apagar tarefa recorrente</div>
+    <div class="action-item danger" onclick="deleteOnlyToday()">✕  Apagar só hoje</div>
+    <div class="action-item danger" onclick="deleteAllRecurrence()">✕  Apagar toda a série</div>
+    <div class="action-item action-cancel" onclick="closeDeleteRecur()">Cancelar</div>
+  </div>
+</div>
+
+<div class="overlay" id="postpone-overlay" onclick="closePostponeSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;"></div>
+<div class="sheet" id="postpone-sheet">
+  <div class="sheet-handle"></div>
+  <div style="font-size:17px;font-weight:600;margin-bottom:16px;">Adiar para qual data?</div>
+  <div class="field"><label>Nova data</label><input type="date" id="inp-postpone-date"/></div>
+  <div class="sheet-actions">
+    <button class="btn-ghost" onclick="closePostponeSheet()">Cancelar</button>
+    <button class="btn-primary" onclick="confirmPostpone()">Adiar</button>
   </div>
 </div>
 
@@ -270,7 +292,7 @@ const H={'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Be
 
 const READONLY = new URLSearchParams(window.location.search).get('view') === '1';
 
-let tasks=[],historico=[],editingId=null,actionId=null,currentTab='hoje',endOpt='never';
+let tasks=[],historico=[],lixeira=[],excecoes=[],editingId=null,actionId=null,currentTab='hoje',endOpt='never';
 
 const todayStr=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
 const dow=()=>new Date().getDay();
@@ -325,7 +347,8 @@ function fromDb(r){
     recurrenceMonth:r.recurrence_month||null,
     priority:r.priority||'normal',
     done_today:r.done_today||false,
-    last_done_date:r.last_done_date||''
+    last_done_date:r.last_done_date||'',
+    deleted_at:r.deleted_at||''
   };
 }
 
@@ -342,7 +365,8 @@ function toDb(t){
     recurrence_month:t.recurrenceMonth||null,
     priority:t.priority,
     done_today:done,
-    last_done_date:done?todayStr():(t.last_done_date||null)
+    last_done_date:done?todayStr():(t.last_done_date||null),
+    deleted_at:t.deleted_at||null
   };
 }
 
@@ -364,6 +388,12 @@ function isActive(t,dateStr){
 
 function isForDate(t,dateStr){
   if(!isActive(t,dateStr))return false;
+  // Check if this occurrence was moved away from this date
+  const skipped=excecoes.find(e=>e.tarefa_id===t.id&&e.data_original===dateStr&&!e.data_nova);
+  if(skipped)return false;
+  // Check if an occurrence was moved TO this date
+  const movedHere=excecoes.find(e=>e.tarefa_id===t.id&&e.data_nova===dateStr);
+  if(movedHere)return true;
   if(t.type==='once')return t.date===dateStr;
   if(t.type==='daily')return true;
   if(t.type==='weekly')return Array.isArray(t.daysOfWeek)&&t.daysOfWeek.includes(dowOfDate(dateStr));
@@ -417,13 +447,18 @@ async function closePreviousDay(prevDate, taskList){
 async function loadAll(){
   setSyncStatus('syncing');
   try{
-    const[rows,hist]=await Promise.all([
+    const[rows,hist,exc]=await Promise.all([
       dbReq('GET','tarefas?order=created_at.asc'),
-      dbReq('GET','historico?order=data.desc&limit=500')
+      dbReq('GET','historico?order=data.desc&limit=500'),
+      dbReq('GET','excecoes?order=created_at.desc&limit=200')
     ]);
-    tasks=rows.map(fromDb);
+    const allTasks=rows.map(fromDb);
+    const cutoff=dateAddDays(todayStr(),-7);
+    lixeira=allTasks.filter(t=>t.deleted_at&&t.deleted_at>=cutoff);
+    tasks=allTasks.filter(t=>!t.deleted_at);
     tasks.forEach(t=>{if(t.last_done_date!==todayStr())t.done_today=false;});
     historico=hist||[];
+    excecoes=exc||[];
     // Remove expired recurrences
     const expired=tasks.filter(t=>t.type!=='once'&&t.endDate&&todayStr()>t.endDate);
     for(const t of expired){tasks=tasks.filter(x=>x.id!==t.id);await dbReq('DELETE','tarefas?id=eq.'+t.id);}
@@ -735,6 +770,7 @@ function render(){
   else if(currentTab==='recorrentes')renderRecorrentes();
   else if(currentTab==='todas')renderTodas();
   else if(currentTab==='relatorio')renderRelatorio();
+  else if(currentTab==='lixeira')renderLixeira();
 }
 
 async function toggleDone(id,e){
@@ -837,21 +873,126 @@ async function saveTask(){
   btn.disabled=false;btn.textContent='Salvar';
 }
 
+async function softDelete(id){
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  t.deleted_at=todayStr();
+  lixeira.push(t);
+  tasks=tasks.filter(x=>x.id!==id);
+  render();
+  await upsert(t);
+}
+
+async function hardDelete(id){
+  tasks=tasks.filter(x=>x.id!==id);
+  lixeira=lixeira.filter(x=>x.id!==id);
+  render();
+  await remove(id);
+}
+
+async function restoreTask(id){
+  const t=lixeira.find(x=>x.id===id);if(!t)return;
+  t.deleted_at='';
+  tasks.push(t);
+  lixeira=lixeira.filter(x=>x.id!==id);
+  render();
+  await upsert(t);
+}
+
 async function deleteCurrentTask(){
-  if(!editingId)return;const id=editingId;
-  tasks=tasks.filter(t=>t.id!==id);closeSheet();render();await remove(id);
+  if(!editingId)return;
+  const t=tasks.find(x=>x.id===editingId);
+  closeSheet();
+  if(t&&t.type!=='once'){
+    actionId=editingId;
+    document.getElementById('delete-recur-sheet').classList.add('open');
+  } else {
+    await softDelete(editingId);
+  }
+}
+
+function closeDeleteRecur(){document.getElementById('delete-recur-sheet').classList.remove('open');}
+
+async function deleteOnlyToday(){
+  closeDeleteRecur();
+  const t=tasks.find(x=>x.id===actionId);if(!t)return;
+  const id=genId();
+  const exc={id,tarefa_id:t.id,data_original:todayStr(),data_nova:null};
+  excecoes.push(exc);
+  render();
+  try{await dbReq('POST','excecoes?on_conflict=id',exc);}catch(e){}
+}
+
+async function deleteAllRecurrence(){
+  closeDeleteRecur();
+  await softDelete(actionId);
+}
+
+function openPostponeSheet(){
+  document.getElementById('inp-postpone-date').value=dateAddDays(todayStr(),1);
+  document.getElementById('postpone-overlay').style.display='block';
+  document.getElementById('postpone-sheet').classList.add('open');
+}
+
+function closePostponeSheet(){
+  document.getElementById('postpone-overlay').style.display='none';
+  document.getElementById('postpone-sheet').classList.remove('open');
+}
+
+async function confirmPostpone(){
+  const newDate=document.getElementById('inp-postpone-date').value;
+  if(!newDate){closePostponeSheet();return;}
+  const t=tasks.find(x=>x.id===actionId);if(!t)return;
+  closePostponeSheet();
+  const id=genId();
+  const exc={id,tarefa_id:t.id,data_original:todayStr(),data_nova:newDate};
+  excecoes.push(exc);
+  render();
+  try{await dbReq('POST','excecoes?on_conflict=id',exc);}catch(e){}
+}
+
+function renderLixeira(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('stat-overdue').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+  document.getElementById('fab').style.display='none';
+  if(!lixeira.length){
+    document.getElementById('task-list').innerHTML='<div class="empty">Lixeira vazia.<br>Itens apagados ficam aqui por 7 dias.</div>';
+    return;
+  }
+  let html='<div class="section-label">Apagados nos últimos 7 dias</div>';
+  lixeira.forEach(t=>{
+    html+=`<div class="task-item">
+      <div class="task-info">
+        <div class="task-text" style="color:var(--text2)">${t.text}</div>
+        <div class="task-meta"><span class="badge badge-once">Apagado em ${fmtDate(t.deleted_at)}</span></div>
+      </div>
+      <button class="task-edit-btn" style="background:var(--green-bg);color:var(--green-text);font-size:13px;width:auto;padding:0 10px;" onclick="restoreTask('${t.id}')">Restaurar</button>
+    </div>`;
+  });
+  document.getElementById('task-list').innerHTML=html;
 }
 
 function openAction(id){
   actionId=id;
   const t=tasks.find(x=>x.id===id);
   document.getElementById('action-toggle').textContent=isDoneToday(t)?'↩  Marcar como pendente':'✓  Marcar como feita';
+  document.getElementById('action-postpone').style.display=t.type!=='once'?'flex':'none';
   document.getElementById('action-sheet').classList.add('open');
 }
 function closeAction(){document.getElementById('action-sheet').classList.remove('open');}
 function editFromAction(){closeAction();openSheet(actionId);}
 function toggleFromAction(){closeAction();toggleDone(actionId);}
-async function deleteFromAction(){const id=actionId;closeAction();tasks=tasks.filter(t=>t.id!==id);render();await remove(id);}
+function postponeFromAction(){closeAction();openPostponeSheet();}
+async function deleteFromAction(){
+  closeAction();
+  const t=tasks.find(x=>x.id===actionId);
+  if(t&&t.type!=='once'){
+    document.getElementById('delete-recur-sheet').classList.add('open');
+  } else {
+    await softDelete(actionId);
+  }
+}
 
 function switchTab(tab,el){
   currentTab=tab;
