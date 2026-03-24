@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tarefas">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiZy1ncmFkIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNzk3MWUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZkMjAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGNsaXBQYXRoIGlkPSJyb3VuZGVkIj4KICAgICAgPHJlY3Qgd2lkdGg9IjEwMjQiIGhlaWdodD0iMTAyNCIgcng9IjIzMCIvPgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxyZWN0IHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHJ4PSIyMzAiIGZpbGw9InVybCgjYmctZ3JhZCkiLz4KCiAgPGcgY2xpcC1wYXRoPSJ1cmwoI3JvdW5kZWQpIj4KICAgIDxjaXJjbGUgY3g9IjEwMjQiIGN5PSIwIiByPSI0ODAiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMDUiLz4KICAgIDxjaXJjbGUgY3g9IjAiIGN5PSIxMDI0IiByPSIzOTAiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMDUiLz4KICA8L2c+CgogIDxjaXJjbGUgY3g9IjUxMiIgY3k9IjQ1MCIgcj0iMjEwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMjgiIG9wYWNpdHk9IjAuMjUiLz4KICA8Y2lyY2xlIGN4PSI1MTIiIGN5PSI0NTAiIHI9IjIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjI4IgogICAgc3Ryb2tlLWRhc2hhcnJheT0iNzkxIiBzdHJva2UtZGFzaG9mZnNldD0iMTk4IgogICAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogICAgdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDUxMiA0NTApIi8+CgogIDxwYXRoIGQ9Ik00MjggNDUwIEw0ODQgNTA4IEw2MDIgMzg2IgogICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjU0IgogICAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CgogIDxyZWN0IHg9IjMzMiIgeT0iNzE4IiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjI0IiByeD0iMTIiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMjUiLz4KICA8cmVjdCB4PSIzMzIiIHk9IjcxOCIgd2lkdGg9IjI0MCIgaGVpZ2h0PSIyNCIgcng9IjEyIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjc1Ii8+Cjwvc3ZnPgo=">
+<link rel="apple-touch-icon" href="icon.png">
+<title>Minhas Tarefas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#ffffff;--bg2:#f5f5f3;--bg3:#ededea;
+  --text:#1a1a18;--text2:#6b6b67;--text3:#a0a09c;
+  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
+  --brand:#f7971e;--brand2:#ffd200;--brand-bg:#FFF4E0;--brand-text:#8a4e00;
+  --green:#1D9E75;--green-bg:#EAF3DE;--green-text:#3B6D11;
+  --blue-bg:#E6F1FB;--blue-text:#185FA5;
+  --purple-bg:#EEEDFE;--purple-text:#534AB7;
+  --amber-bg:#FAEEDA;--amber-text:#854F0B;
+  --red-bg:#FCEBEB;--red-text:#A32D2D;
+  --radius:10px;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+    --text:#f0efe8;--text2:#9a9a94;--text3:#66665f;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+    --green-bg:#173404;--green-text:#97C459;
+    --blue-bg:#042C53;--blue-text:#85B7EB;
+    --purple-bg:#26215C;--purple-text:#AFA9EC;
+    --amber-bg:#412402;--amber-text:#FAC775;
+    --red-bg:#501313;--red-text:#F09595;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding-bottom:calc(70px + var(--safe-bottom));}
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:calc(var(--safe-top) + 12px) 16px 12px;position:sticky;top:0;z-index:10;}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;}
+.app-title{font-size:20px;font-weight:600;}
+.app-date{font-size:12px;color:var(--text2);margin-top:2px;}
+.top-right{display:flex;align-items:center;gap:10px;}
+.sync-indicator{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.sync-dot.ok{background:var(--green);}
+.sync-dot.syncing{background:var(--amber-text);animation:pulse 1s infinite;}
+.sync-dot.error{background:var(--red-text);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.add-top-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;border:none;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.readonly-badge{font-size:11px;background:var(--bg2);color:var(--text2);border:0.5px solid var(--border2);border-radius:6px;padding:3px 8px;}
+.tabs{display:flex;background:var(--bg);border-bottom:0.5px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:10px 14px;font-size:13px;border:none;background:transparent;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.tab.active{color:var(--brand);font-weight:500;border-bottom-color:var(--brand);}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 16px;}
+.stat{background:var(--bg);border-radius:var(--radius);padding:10px 12px;border:0.5px solid var(--border);}
+.stat-n{font-size:24px;font-weight:600;color:var(--brand);}
+.stat-l{font-size:11px;color:var(--text2);margin-top:1px;}
+.alert-bar{margin:0 16px 4px;display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--amber-bg);border-radius:var(--radius);font-size:12px;color:var(--amber-text);font-weight:500;}
+.content{padding:8px 16px;}
+.section-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin:14px 0 6px;}
+.day-section-header{font-size:14px;font-weight:600;color:var(--text);margin:18px 0 8px;display:flex;align-items:center;gap:8px;}
+.day-section-header .day-badge{font-size:11px;font-weight:400;color:var(--text2);}
+.task-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:6px;-webkit-user-select:none;user-select:none;}
+.task-item.clickable{cursor:pointer;}
+.task-item.done .task-text{text-decoration:line-through;color:var(--text3);}
+.checkbox{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.checkbox.checked{background:linear-gradient(135deg,#f7971e,#ffd200);border-color:#f7971e;}
+.checkmark{width:9px;height:7px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translate(1px,-1px);display:none;}
+.checkbox.checked .checkmark{display:block;}
+.task-info{flex:1;min-width:0;}
+.task-text{font-size:15px;color:var(--text);line-height:1.3;}
+.task-meta{display:flex;align-items:center;gap:5px;margin-top:4px;flex-wrap:wrap;}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:500;}
+.badge-daily{background:var(--blue-bg);color:var(--blue-text);}
+.badge-weekly{background:var(--purple-bg);color:var(--purple-text);}
+.badge-biweekly{background:#F0F4FF;color:#3B5BDB;}
+.badge-monthly{background:#F3F0FF;color:#6741D9;}
+.badge-yearly{background:#FFF0F6;color:#C2255C;}
+.badge-once{background:var(--amber-bg);color:var(--amber-text);}
+.badge-overdue{background:var(--red-bg);color:var(--red-text);}
+.badge-today{background:var(--green-bg);color:var(--green-text);}
+.badge-time{background:var(--bg2);color:var(--text2);border:0.5px solid var(--border2);}
+.badge-enddate{background:var(--amber-bg);color:var(--amber-text);}
+.prio-alta{font-size:10px;color:var(--red-text);font-weight:600;}
+.task-edit-btn{width:32px;height:32px;border:none;background:var(--bg2);color:var(--text2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;letter-spacing:1px;}
+.fab{position:fixed;bottom:calc(20px + var(--safe-bottom));right:20px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;border:none;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(247,151,30,0.4);z-index:10;}
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px;line-height:1.6;}
+.report-section{margin-bottom:24px;}
+.report-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.chart-wrap{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;}
+.bar-chart{display:flex;align-items:flex-end;gap:4px;height:80px;}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px;}
+.bar-fill{width:100%;border-radius:4px 4px 0 0;background:var(--green);min-height:2px;}
+.bar-fill.low{background:var(--red-text);}
+.bar-fill.mid{background:var(--amber-text);}
+.bar-label{font-size:9px;color:var(--text3);}
+.bar-pct{font-size:9px;color:var(--text2);font-weight:500;}
+.streak-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;display:flex;align-items:center;gap:14px;}
+.streak-num{font-size:36px;font-weight:700;color:var(--brand);line-height:1;}
+.streak-info-title{font-size:14px;font-weight:600;}
+.streak-info-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.rank-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:6px;}
+.rank-num{font-size:12px;font-weight:600;color:var(--text3);width:18px;flex-shrink:0;}
+.rank-info{flex:1;min-width:0;}
+.rank-name{font-size:14px;color:var(--text);}
+.rank-pct{font-size:11px;color:var(--text2);margin-top:2px;}
+.rank-bar-wrap{width:60px;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.rank-bar{height:100%;background:var(--red-text);border-radius:3px;}
+.week-compare{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.week-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;}
+.week-card-label{font-size:11px;color:var(--text2);margin-bottom:4px;}
+.week-card-num{font-size:22px;font-weight:600;}
+.week-card-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.week-card-num.up{color:var(--green);}
+.week-card-num.down{color:var(--red-text);}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;}
+.overlay.open{display:block;}
+.sheet{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-radius:20px 20px 0 0;padding:0 16px calc(16px + var(--safe-bottom));z-index:51;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);max-height:92vh;overflow-y:auto;}
+.sheet.open{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:10px auto 16px;}
+.sheet-title{font-size:17px;font-weight:600;margin-bottom:16px;}
+.field{margin-bottom:14px;}
+.field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;font-weight:500;}
+.field input,.field select{width:100%;padding:12px 14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-size:16px;font-family:inherit;outline:none;-webkit-appearance:none;appearance:none;}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+.days-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.day-btn{padding:8px 0;border:0.5px solid var(--border2);border-radius:8px;background:var(--bg2);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;text-align:center;transition:all 0.15s;font-family:inherit;}
+.day-btn.selected{background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;border-color:#f7971e;}
+.end-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.end-opt-btn{padding:10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text2);font-size:13px;cursor:pointer;font-family:inherit;text-align:center;}
+.end-opt-btn.selected{background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;border-color:#f7971e;}
+.sheet-actions{display:flex;gap:10px;margin-top:8px;}
+.btn-primary{flex:1;padding:14px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-primary:disabled{opacity:0.5;}
+.btn-ghost{padding:14px 20px;background:transparent;color:var(--text2);border:0.5px solid var(--border2);border-radius:var(--radius);font-size:15px;cursor:pointer;font-family:inherit;}
+.btn-danger{padding:14px;background:var(--red-bg);color:var(--red-text);border:none;border-radius:var(--radius);font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;width:100%;margin-top:8px;}
+.action-sheet{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:60;display:none;align-items:flex-end;}
+.action-sheet.open{display:flex;}
+.action-sheet-inner{background:var(--bg);border-radius:14px 14px 0 0;padding:0 16px calc(16px + var(--safe-bottom));width:100%;}
+.action-item{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:0.5px solid var(--border);font-size:16px;cursor:pointer;color:var(--text);}
+.action-item:last-child{border-bottom:none;}
+.action-item.danger{color:var(--red-text);}
+.action-cancel{justify-content:center;color:var(--text2);font-size:15px;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="34" height="34" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;border-radius:8px;">
+        <defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f7971e"/><stop offset="100%" stop-color="#ffd200"/></linearGradient></defs>
+        <rect width="1024" height="1024" fill="url(#tg)"/>
+        <circle cx="512" cy="450" r="210" fill="none" stroke="#fff" stroke-width="60" opacity="0.25"/>
+        <circle cx="512" cy="450" r="210" fill="none" stroke="#fff" stroke-width="60" stroke-dasharray="791" stroke-dashoffset="198" stroke-linecap="round" transform="rotate(-90 512 450)"/>
+        <path d="M428 450 L484 508 L602 386" fill="none" stroke="#fff" stroke-width="80" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="app-title">Minhas Tarefas</div>
+        <div class="app-date" id="today-date"></div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="sync-indicator">
+        <div class="sync-dot" id="sync-dot"></div>
+        <span id="sync-label">—</span>
+      </div>
+      <button class="add-top-btn" id="btn-add-top" onclick="openSheet()">+</button>
+      <span class="readonly-badge" id="readonly-badge" style="display:none">Somente leitura</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('hoje',this)">Hoje</button>
+  <button class="tab" onclick="switchTab('7dias',this)">Próximos 7 dias</button>
+  <button class="tab" onclick="switchTab('atrasadas',this)">Atrasadas</button>
+  <button class="tab" onclick="switchTab('historico',this)">Histórico</button>
+  <button class="tab" onclick="switchTab('recorrentes',this)">Recorrentes</button>
+  <button class="tab" onclick="switchTab('todas',this)">Todas</button>
+  <button class="tab" onclick="switchTab('relatorio',this)">Relatório</button>
+</div>
+
+<div id="main-area">
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="stat-done">—</div><div class="stat-l">Feitas hoje</div></div>
+    <div class="stat"><div class="stat-n" id="stat-pending">—</div><div class="stat-l">Pendentes</div></div>
+    <div class="stat"><div class="stat-n" id="stat-overdue">—</div><div class="stat-l">Atrasadas</div></div>
+  </div>
+  <div id="alert-container"></div>
+  <div class="content" id="task-list"><div class="empty">Carregando...</div></div>
+</div>
+
+<button class="fab" id="fab" onclick="openSheet()">+</button>
+
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="sheet-title">Nova tarefa</div>
+  <div class="field">
+    <label>Descrição</label>
+    <input type="text" id="inp-text" placeholder="O que precisa fazer?" autocomplete="off"/>
+  </div>
+  <div class="field">
+    <label>Tipo de recorrência</label>
+    <select id="inp-type" onchange="toggleFields()">
+      <option value="once">Uma vez / com data</option>
+      <option value="daily">Diária (todo dia)</option>
+      <option value="weekly">Semanal (dias fixos)</option>
+      <option value="biweekly">Quinzenal</option>
+      <option value="monthly">Mensal</option>
+      <option value="yearly">Anual</option>
+    </select>
+  </div>
+  <div class="field" id="field-date"><label>Data</label><input type="date" id="inp-date"/></div>
+  <div class="field" id="field-days" style="display:none">
+    <label>Dias da semana</label>
+    <div class="days-grid" id="days-grid">
+      <button type="button" class="day-btn" data-day="0">Dom</button>
+      <button type="button" class="day-btn" data-day="1">Seg</button>
+      <button type="button" class="day-btn" data-day="2">Ter</button>
+      <button type="button" class="day-btn" data-day="3">Qua</button>
+      <button type="button" class="day-btn" data-day="4">Qui</button>
+      <button type="button" class="day-btn" data-day="5">Sex</button>
+      <button type="button" class="day-btn" data-day="6">Sáb</button>
+    </div>
+  </div>
+  <div class="field" id="field-recurrence-start" style="display:none"><label>A partir de</label><input type="date" id="inp-rec-start"/></div>
+  <div class="field" id="field-monthday" style="display:none"><label>Dia do mês</label><input type="number" id="inp-monthday" min="1" max="31" placeholder="Ex: 15"/></div>
+  <div class="field" id="field-yeardate" style="display:none"><label>Data do ano</label><input type="date" id="inp-yeardate"/></div>
+  <div class="field" id="field-enddate">
+    <label>Encerrar recorrência</label>
+    <div class="end-opts">
+      <button type="button" class="end-opt-btn selected" id="end-opt-never" onclick="selectEndOpt('never')">Sem fim</button>
+      <button type="button" class="end-opt-btn" id="end-opt-date" onclick="selectEndOpt('date')">Até uma data</button>
+    </div>
+    <input type="date" id="inp-enddate" style="display:none"/>
+  </div>
+  <div class="field"><label>Horário (opcional)</label><input type="time" id="inp-time"/></div>
+  <div class="field"><label>Prioridade</label>
+    <select id="inp-prio">
+      <option value="normal">Normal</option>
+      <option value="alta">Alta</option>
+      <option value="baixa">Baixa</option>
+    </select>
+  </div>
+  <div class="sheet-actions">
+    <button class="btn-ghost" onclick="closeSheet()">Cancelar</button>
+    <button class="btn-primary" id="btn-save" onclick="saveTask()">Salvar</button>
+  </div>
+  <button class="btn-danger" id="btn-delete" style="display:none" onclick="deleteCurrentTask()">Apagar tarefa</button>
+</div>
+
+<div class="action-sheet" id="action-sheet">
+  <div class="action-sheet-inner">
+    <div class="action-item" id="action-edit" onclick="editFromAction()">✎  Editar</div>
+    <div class="action-item" id="action-toggle" onclick="toggleFromAction()">✓  Marcar como feita</div>
+    <div class="action-item danger" id="action-delete" onclick="deleteFromAction()">✕  Apagar</div>
+    <div class="action-item action-cancel" onclick="closeAction()">Cancelar</div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL='https://ykjjkkwlchpppyppttio.supabase.co';
+const SUPA_KEY='sb_publishable_D3Gd9FlFKKebRMoDgTun2g_5tSDoTDJ';
+const H={'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+
+const READONLY = new URLSearchParams(window.location.search).get('view') === '1';
+
+let tasks=[],historico=[],editingId=null,actionId=null,currentTab='hoje',endOpt='never';
+
+const todayStr=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
+const dow=()=>new Date().getDay();
+
+function dateAddDays(str,n){const d=new Date(str+'T12:00:00');d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];}
+function next7Days(){return Array.from({length:7},(_,i)=>dateAddDays(todayStr(),i+1));}
+function dowOfDate(str){return new Date(str+'T12:00:00').getDay();}
+function monthOfDate(str){return parseInt(str.split('-')[1]);}
+function dayOfDate(str){return parseInt(str.split('-')[2]);}
+function fmtDate(d){if(!d)return'';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function daysUntil(d){const diff=Math.ceil((new Date(d+'T12:00:00')-new Date(todayStr()+'T12:00:00'))/86400000);return diff===1?'amanhã':diff===0?'hoje':`em ${diff} dias`;}
+function fmtTime(t){if(!t)return'';const[h,m]=t.split(':');return`${h}h${m!=='00'?m:''}`;}
+
+const DAYS_SHORT=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const DAYS_FULL=['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+const MONTHS=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+function setSyncStatus(s){
+  document.getElementById('sync-dot').className='sync-dot '+s;
+  document.getElementById('sync-label').textContent=s==='ok'?'Sincronizado':s==='syncing'?'Salvando...':'Erro';
+}
+
+function applyReadonly(){
+  if(!READONLY)return;
+  document.getElementById('btn-add-top').style.display='none';
+  document.getElementById('fab').style.display='none';
+  document.getElementById('readonly-badge').style.display='inline-flex';
+  document.getElementById('action-edit').style.display='none';
+  document.getElementById('action-delete').style.display='none';
+}
+
+async function dbReq(method,path,body){
+  const isUpsert=method==='POST'&&path.includes('on_conflict');
+  const prefer=isUpsert?'return=representation,resolution=merge-duplicates':'return=representation';
+  const opts={method,headers:{...H,'Prefer':prefer}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(SUPA_URL+'/rest/v1/'+path,opts);
+  if(!r.ok)throw new Error(await r.text());
+  const txt=await r.text();
+  return txt?JSON.parse(txt):null;
+}
+
+function fromDb(r){
+  return{
+    id:r.id,text:r.text,type:r.type||'once',
+    date:r.date||'',
+    daysOfWeek:r.days_of_week?(typeof r.days_of_week==='string'?JSON.parse(r.days_of_week):r.days_of_week):[],
+    time:r.time||'',
+    endDate:r.end_date||'',
+    recurrenceStart:r.recurrence_start||'',
+    recurrenceDay:r.recurrence_day||null,
+    recurrenceMonth:r.recurrence_month||null,
+    priority:r.priority||'normal',
+    done_today:r.done_today||false,
+    last_done_date:r.last_done_date||''
+  };
+}
+
+function toDb(t){
+  const done=isDoneToday(t);
+  return{
+    id:t.id,text:t.text,type:t.type,
+    date:t.date||null,
+    days_of_week:t.daysOfWeek&&t.daysOfWeek.length?JSON.stringify(t.daysOfWeek):null,
+    time:t.time||null,
+    end_date:t.endDate||null,
+    recurrence_start:t.recurrenceStart||null,
+    recurrence_day:t.recurrenceDay||null,
+    recurrence_month:t.recurrenceMonth||null,
+    priority:t.priority,
+    done_today:done,
+    last_done_date:done?todayStr():(t.last_done_date||null)
+  };
+}
+
+// KEY FIX: done_today is only true if last_done_date === today
+function isDoneToday(t){return t.done_today&&t.last_done_date===todayStr();}
+
+// KEY FIX: for recurring tasks, only check done_today for TODAY's date
+function isDoneForDate(t,dateStr){
+  if(dateStr===todayStr())return isDoneToday(t);
+  return false; // future/past dates are never "done" for recurring tasks
+}
+
+function isActive(t,dateStr){
+  const d=dateStr||todayStr();
+  if(t.type==='once')return true;
+  if(t.endDate&&d>t.endDate)return false;
+  return true;
+}
+
+function isForDate(t,dateStr){
+  if(!isActive(t,dateStr))return false;
+  if(t.type==='once')return t.date===dateStr;
+  if(t.type==='daily')return true;
+  if(t.type==='weekly')return Array.isArray(t.daysOfWeek)&&t.daysOfWeek.includes(dowOfDate(dateStr));
+  if(t.type==='biweekly'){
+    if(!t.recurrenceStart)return false;
+    const diff=Math.round((new Date(dateStr+'T12:00:00')-new Date(t.recurrenceStart+'T12:00:00'))/86400000);
+    return diff>=0&&diff%14===0;
+  }
+  if(t.type==='monthly'){
+    if(t.recurrenceDay)return dayOfDate(dateStr)===t.recurrenceDay;
+    if(t.recurrenceStart){
+      const startDay=dayOfDate(t.recurrenceStart);
+      return dayOfDate(dateStr)===startDay;
+    }
+    return false;
+  }
+  if(t.type==='yearly'){
+    if(t.recurrenceDay&&t.recurrenceMonth){
+      return dayOfDate(dateStr)===t.recurrenceDay&&monthOfDate(dateStr)===t.recurrenceMonth;
+    }
+    if(t.recurrenceStart){
+      return dateStr.slice(5)===t.recurrenceStart.slice(5);
+    }
+    return false;
+  }
+  return false;
+}
+
+const isForToday=t=>isForDate(t,todayStr());
+const isOverdue=t=>t.type==='once'&&t.date&&t.date<todayStr()&&!isDoneToday(t);
+
+async function closePreviousDay(prevDate, taskList){
+  const prevEntries = historico.filter(h => h.data === prevDate);
+  const dayTasks = taskList.filter(t => isForDate(t, prevDate));
+  if(!dayTasks.length) return;
+  const prevIds = new Set(prevEntries.map(h => h.tarefa_id));
+  const missed = dayTasks.filter(t => !prevIds.has(t.id));
+  if(!missed.length) return;
+  // Save silently without touching sync indicator
+  const H2 = {'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=representation,resolution=merge-duplicates'};
+  missed.forEach(t => {
+    const id = t.id + '_' + prevDate;
+    historico.push({id, tarefa_id:t.id, tarefa_text:t.text, data:prevDate, concluida:false});
+    fetch(SUPA_URL+'/rest/v1/historico?on_conflict=id', {
+      method:'POST', headers:H2,
+      body:JSON.stringify({id, tarefa_id:t.id, tarefa_text:t.text, data:prevDate, concluida:false})
+    }).catch(()=>{});
+  });
+}
+
+async function loadAll(){
+  setSyncStatus('syncing');
+  try{
+    const[rows,hist]=await Promise.all([
+      dbReq('GET','tarefas?order=created_at.asc'),
+      dbReq('GET','historico?order=data.desc&limit=500')
+    ]);
+    tasks=rows.map(fromDb);
+    tasks.forEach(t=>{if(t.last_done_date!==todayStr())t.done_today=false;});
+    historico=hist||[];
+    // Remove expired recurrences
+    const expired=tasks.filter(t=>t.type!=='once'&&t.endDate&&todayStr()>t.endDate);
+    for(const t of expired){tasks=tasks.filter(x=>x.id!==t.id);await dbReq('DELETE','tarefas?id=eq.'+t.id);}
+    setSyncStatus('ok');
+    applyReadonly();
+    render();
+    // Close previous day in background (after rendering)
+    const yesterday=dateAddDays(todayStr(),-1);
+    closePreviousDay(yesterday, tasks);
+    // Ensure sync indicator stays ok
+    setTimeout(()=>setSyncStatus('ok'), 3000);
+  }catch(e){
+    setSyncStatus('error');
+    document.getElementById('task-list').innerHTML='<div class="empty">Não foi possível conectar.<br>Verifique sua internet e recarregue.</div>';
+  }
+}
+
+async function upsert(t){
+  setSyncStatus('syncing');
+  try{await dbReq('POST','tarefas?on_conflict=id',toDb(t));setSyncStatus('ok');}
+  catch(e){setSyncStatus('error');}
+}
+
+async function saveHistorico(t,concluida){
+  const id=t.id+'_'+todayStr();
+  try{await dbReq('POST','historico?on_conflict=id',{id,tarefa_id:t.id,tarefa_text:t.text,data:todayStr(),concluida});}catch(e){}
+}
+
+function renderAtrasadas(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+
+  // Tarefas pontuais com data passada não concluídas
+  const overdueOnce=tasks.filter(t=>t.type==='once'&&t.date&&t.date<todayStr());
+
+  // Tarefas recorrentes não concluídas ontem
+  const yesterday=dateAddDays(todayStr(),-1);
+  const overdueRec=tasks.filter(t=>t.type!=='once'&&isForDate(t,yesterday)).filter(t=>{
+    const h=historico.find(h=>h.tarefa_id===t.id&&h.data===yesterday&&h.concluida);
+    return!h;
+  });
+
+  document.getElementById('stat-overdue').textContent=overdueOnce.length+overdueRec.length;
+
+  if(!overdueOnce.length&&!overdueRec.length){
+    document.getElementById('task-list').innerHTML='<div class="empty">Nenhuma tarefa atrasada! 🎉</div>';
+    return;
+  }
+
+  let html='';
+  if(overdueOnce.length){
+    html+=`<div class="section-label">Tarefas pontuais em atraso</div>`;
+    overdueOnce.forEach(t=>{html+=taskHTML(t,t.date);});
+  }
+  if(overdueRec.length){
+    html+=`<div class="section-label">Recorrentes não feitas ontem</div>`;
+    overdueRec.forEach(t=>{html+=taskHTML(t,yesterday);});
+  }
+  document.getElementById('task-list').innerHTML=html;
+}
+
+function renderHistorico(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('stat-overdue').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+  document.getElementById('fab').style.display='none';
+
+  // Get unique dates from historico, excluding today, sorted desc
+  const dates=[...new Set(historico.map(h=>h.data))].filter(d=>d<todayStr()).sort().reverse();
+
+  if(!dates.length){
+    document.getElementById('task-list').innerHTML='<div class="empty">Nenhum histórico ainda.<br>As tarefas concluídas aparecerão aqui.</div>';
+    return;
+  }
+
+  let html='';
+  dates.forEach(dateStr=>{
+    const[y,m,d]=dateStr.split('-');
+    const dowLabel=DAYS_FULL[dowOfDate(dateStr)];
+    const dayEntries=historico.filter(h=>h.data===dateStr);
+    const done=dayEntries.filter(h=>h.concluida);
+    const missed=dayEntries.filter(h=>!h.concluida);
+    const pct=dayEntries.length>0?Math.round((done.length/dayEntries.length)*100):0;
+    const pctColor=pct>=75?'var(--green)':pct>=40?'var(--amber-text)':'var(--red-text)';
+
+    html+=`<div class="day-section-header">${dowLabel} <span class="day-badge">${d}/${m}</span> <span style="margin-left:auto;font-size:12px;font-weight:500;color:${pctColor}">${pct}% concluído</span></div>`;
+
+    if(done.length){
+      html+=`<div class="section-label">Concluídas</div>`;
+      done.forEach(h=>{
+        html+=`<div class="task-item done">
+          <div class="checkbox checked"><div class="checkmark"></div></div>
+          <div class="task-info"><div class="task-text">${h.tarefa_text}</div></div>
+        </div>`;
+      });
+    }
+    if(missed.length){
+      html+=`<div class="section-label">Não feitas</div>`;
+      missed.forEach(h=>{
+        html+=`<div class="task-item">
+          <div class="checkbox"></div>
+          <div class="task-info"><div class="task-text" style="color:var(--text2)">${h.tarefa_text}</div></div>
+        </div>`;
+      });
+    }
+  });
+  document.getElementById('task-list').innerHTML=html;
+}
+
+async function remove(id){
+  setSyncStatus('syncing');
+  try{await dbReq('DELETE','tarefas?id=eq.'+id);setSyncStatus('ok');}catch(e){setSyncStatus('error');}
+}
+
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
+function recurrenceLabel(t){
+  if(t.type==='daily')return'Todo dia';
+  if(t.type==='weekly'){
+    if(!t.daysOfWeek||!t.daysOfWeek.length)return'Semanal';
+    if(t.daysOfWeek.length===1)return`Toda ${DAYS_SHORT[t.daysOfWeek[0]]}`;
+    return t.daysOfWeek.map(d=>DAYS_SHORT[d]).join(' + ');
+  }
+  if(t.type==='biweekly')return'Quinzenal';
+  if(t.type==='monthly')return`Todo dia ${t.recurrenceDay||dayOfDate(t.recurrenceStart||todayStr())}`;
+  if(t.type==='yearly'){
+    const d=t.recurrenceStart||`${new Date().getFullYear()}-${String(t.recurrenceMonth).padStart(2,'0')}-${String(t.recurrenceDay).padStart(2,'0')}`;
+    return`Todo ano em ${dayOfDate(d)}/${monthOfDate(d)}`;
+  }
+  return'';
+}
+
+function badgeClass(t){
+  if(t.type==='daily')return'badge-daily';
+  if(t.type==='weekly')return'badge-weekly';
+  if(t.type==='biweekly')return'badge-biweekly';
+  if(t.type==='monthly')return'badge-monthly';
+  if(t.type==='yearly')return'badge-yearly';
+  return'badge-once';
+}
+
+function badge(t){
+  if(t.type==='once'){
+    if(!t.date)return`<span class="badge badge-once">Sem data</span>`;
+    if(isOverdue(t))return`<span class="badge badge-overdue">Atrasada · ${fmtDate(t.date)}</span>`;
+    if(t.date===todayStr())return`<span class="badge badge-today">Hoje</span>`;
+    return`<span class="badge badge-once">${fmtDate(t.date)} · ${daysUntil(t.date)}</span>`;
+  }
+  return`<span class="badge ${badgeClass(t)}">${recurrenceLabel(t)}</span>`;
+}
+
+function taskHTML(t,dateStr){
+  const done=isDoneForDate(t,dateStr||todayStr());
+  const prio=t.priority==='alta'?'<span class="prio-alta">▲ alta</span>':'';
+  const timeBadge=t.time?`<span class="badge badge-time">🕐 ${fmtTime(t.time)}</span>`:'';
+  const endBadge=t.endDate&&t.type!=='once'?`<span class="badge badge-enddate">até ${fmtDate(t.endDate)}</span>`:'';
+  const canClick=!READONLY||false;
+  const editBtn=READONLY?'':'<button class="task-edit-btn" onclick="event.stopPropagation();openAction(\''+t.id+'\')">···</button>';
+  return`<div class="task-item ${done?'done':''} ${!READONLY?'clickable':''}" ${!READONLY?`onclick="toggleDone('${t.id}',event)"`:''} oncontextmenu="${!READONLY?`openAction('${t.id}');`:``}return false;">
+    <div class="checkbox ${done?'checked':''}"><div class="checkmark"></div></div>
+    <div class="task-info">
+      <div class="task-text">${t.text}</div>
+      <div class="task-meta">${badge(t)}${timeBadge}${endBadge}${prio}</div>
+    </div>
+    ${editBtn}
+  </div>`;
+}
+
+function getVisible(){
+  if(currentTab==='hoje')return tasks.filter(isForToday).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+  if(currentTab==='7dias')return[];
+  if(currentTab==='recorrentes')return tasks.filter(t=>t.type!=='once');
+  return tasks;
+}
+
+function renderHoje(){
+  const today=tasks.filter(isForToday);
+  const overdueList=tasks.filter(isOverdue);
+  const done=today.filter(t=>isDoneToday(t)).length;
+  document.getElementById('stat-done').textContent=done;
+  document.getElementById('stat-pending').textContent=today.length-done;
+  document.getElementById('stat-overdue').textContent=overdueList.length;
+  document.getElementById('alert-container').innerHTML=overdueList.length
+    ?`<div class="alert-bar">⚠ ${overdueList.length} tarefa${overdueList.length>1?'s':''} atrasada${overdueList.length>1?'s':''}. Veja "Próximos 7 dias".</div>`:'';
+  const sorted=today.sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+  const pending=sorted.filter(t=>!isDoneToday(t)),done2=sorted.filter(t=>isDoneToday(t));
+  let html='';
+  if(pending.length){html+=`<div class="section-label">Pendentes</div>`;pending.forEach(t=>{html+=taskHTML(t,todayStr());});}
+  if(done2.length){html+=`<div class="section-label">Concluídas</div>`;done2.forEach(t=>{html+=taskHTML(t,todayStr());});}
+  if(!today.length)html='<div class="empty">Nenhuma tarefa para hoje.<br>Toque em + para adicionar.</div>';
+  document.getElementById('task-list').innerHTML=html;
+}
+
+function render7Dias(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('stat-overdue').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+  const days=next7Days(); // starts from tomorrow
+  let html='';
+  days.forEach((dateStr,i)=>{
+    const dayTasks=tasks.filter(t=>isForDate(t,dateStr)).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+    const label=i===0?'Amanhã':DAYS_FULL[dowOfDate(dateStr)];
+    const[y,m,d]=dateStr.split('-');
+    html+=`<div class="day-section-header">${label} <span class="day-badge">${d}/${m}</span></div>`;
+    if(dayTasks.length){dayTasks.forEach(t=>{html+=taskHTML(t,dateStr);});}
+    else{html+=`<div style="font-size:13px;color:var(--text3);padding:6px 0 10px;">Nenhuma tarefa</div>`;}
+  });
+  document.getElementById('task-list').innerHTML=html;
+}
+
+function renderRecorrentes(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('stat-overdue').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+  const rec=tasks.filter(t=>t.type!=='once');
+  if(!rec.length){document.getElementById('task-list').innerHTML='<div class="empty">Nenhuma tarefa recorrente.</div>';return;}
+  const groups={daily:[],weekly:[],biweekly:[],monthly:[],yearly:[]};
+  rec.forEach(t=>{if(groups[t.type])groups[t.type].push(t);});
+  const labels={daily:'Diárias',weekly:'Semanais',biweekly:'Quinzenais',monthly:'Mensais',yearly:'Anuais'};
+  let html='';
+  for(const[type,items] of Object.entries(groups)){
+    if(items.length){html+=`<div class="section-label">${labels[type]}</div>`;items.forEach(t=>{html+=taskHTML(t,todayStr());});}
+  }
+  document.getElementById('task-list').innerHTML=html;
+}
+
+function renderTodas(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('stat-overdue').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+  if(!tasks.length){document.getElementById('task-list').innerHTML='<div class="empty">Nenhuma tarefa.</div>';return;}
+  const rec=tasks.filter(t=>t.type!=='once'),once=tasks.filter(t=>t.type==='once');
+  let html='';
+  if(rec.length){html+=`<div class="section-label">Recorrentes</div>`;rec.forEach(t=>{html+=taskHTML(t,todayStr());});}
+  if(once.length){html+=`<div class="section-label">Com data</div>`;once.forEach(t=>{html+=taskHTML(t,todayStr());});}
+  document.getElementById('task-list').innerHTML=html;
+}
+
+function renderRelatorio(){
+  document.getElementById('stat-done').textContent='—';
+  document.getElementById('stat-pending').textContent='—';
+  document.getElementById('stat-overdue').textContent='—';
+  document.getElementById('alert-container').innerHTML='';
+  document.getElementById('fab').style.display='none';
+  const days=Array.from({length:7},(_,i)=>dateAddDays(todayStr(),i-6));
+  const dayStats=days.map(dateStr=>{
+    const total=tasks.filter(t=>isForDate(t,dateStr)).length;
+    const done=historico.filter(h=>h.data===dateStr&&h.concluida).length;
+    const pct=total>0?Math.round((done/total)*100):null;
+    return{dateStr,total,done,pct};
+  });
+  let streak=0;
+  for(let i=days.length-2;i>=0;i--){
+    const ds=dayStats[i];
+    if(ds.total===0){streak++;continue;}
+    if(ds.pct===100)streak++;else break;
+  }
+  const last30=Array.from({length:30},(_,i)=>dateAddDays(todayStr(),i-29));
+  const taskMissMap={};
+  tasks.forEach(t=>{
+    let missed=0,total=0;
+    last30.filter(d=>d<todayStr()).forEach(dateStr=>{
+      if(isForDate(t,dateStr)){
+        total++;
+        const done=historico.find(h=>h.tarefa_id===t.id&&h.data===dateStr&&h.concluida);
+        if(!done)missed++;
+      }
+    });
+    if(total>0)taskMissMap[t.id]={text:t.text,missed,total,pct:Math.round((missed/total)*100)};
+  });
+  const ranking=Object.values(taskMissMap).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct).slice(0,5);
+  const thisWeekDays=Array.from({length:7},(_,i)=>dateAddDays(todayStr(),i-dow()));
+  const lastWeekDays=thisWeekDays.map(d=>dateAddDays(d,-7));
+  function weekPct(wDays){
+    let tot=0,done=0;
+    wDays.filter(d=>d<todayStr()).forEach(dateStr=>{
+      tot+=tasks.filter(t=>isForDate(t,dateStr)).length;
+      done+=historico.filter(h=>h.data===dateStr&&h.concluida).length;
+    });
+    return tot>0?Math.round((done/tot)*100):0;
+  }
+  const thisPct=weekPct(thisWeekDays),lastPct=weekPct(lastWeekDays),diff=thisPct-lastPct;
+  let barsHTML='';
+  dayStats.forEach(ds=>{
+    const h=ds.pct===null?0:Math.round((ds.pct/100)*80);
+    const cls=ds.pct===null?'':ds.pct>=75?'':ds.pct>=40?'mid':'low';
+    barsHTML+=`<div class="bar-col"><div class="bar-pct">${ds.pct===null?'':ds.pct+'%'}</div><div class="bar-fill ${cls}" style="height:${h}px"></div><div class="bar-label">${DAYS_SHORT[dowOfDate(ds.dateStr)]}</div></div>`;
+  });
+  let rankHTML=ranking.length?ranking.map((r,i)=>`<div class="rank-item"><div class="rank-num">${i+1}</div><div class="rank-info"><div class="rank-name">${r.text}</div><div class="rank-pct">${r.pct}% de falta nos últimos 30 dias</div></div><div class="rank-bar-wrap"><div class="rank-bar" style="width:${r.pct}%"></div></div></div>`).join(''):'<div style="font-size:13px;color:var(--text3);padding:8px 0;">Dados insuficientes ainda.</div>';
+  const diffHTML=diff===0?`<div class="week-card-sub">igual à semana passada</div>`:diff>0?`<div class="week-card-sub" style="color:var(--green)">▲ ${diff}% em relação à semana passada</div>`:`<div class="week-card-sub" style="color:var(--red-text)">▼ ${Math.abs(diff)}% em relação à semana passada</div>`;
+  document.getElementById('task-list').innerHTML=`
+    <div class="report-section"><div class="report-title">Conclusões nos últimos 7 dias</div><div class="chart-wrap"><div class="bar-chart">${barsHTML}</div></div></div>
+    <div class="report-section"><div class="report-title">Sequência atual</div><div class="streak-card"><div class="streak-num">${streak}</div><div><div class="streak-info-title">${streak===1?'1 dia consecutivo':`${streak} dias consecutivos`}</div><div class="streak-info-sub">com 100% das tarefas concluídas</div></div></div></div>
+    <div class="report-section"><div class="report-title">Semana atual vs anterior</div><div class="week-compare"><div class="week-card"><div class="week-card-label">Esta semana</div><div class="week-card-num ${thisPct>=lastPct?'up':'down'}">${thisPct}%</div>${diffHTML}</div><div class="week-card"><div class="week-card-label">Semana passada</div><div class="week-card-num">${lastPct}%</div><div class="week-card-sub">de conclusão</div></div></div></div>
+    <div class="report-section"><div class="report-title">Tarefas mais faltadas (30 dias)</div>${rankHTML}</div>`;
+}
+
+function render(){
+  if(!READONLY)document.getElementById('fab').style.display='flex';
+  if(currentTab==='hoje')renderHoje();
+  else if(currentTab==='7dias')render7Dias();
+  else if(currentTab==='atrasadas')renderAtrasadas();
+  else if(currentTab==='historico')renderHistorico();
+  else if(currentTab==='recorrentes')renderRecorrentes();
+  else if(currentTab==='todas')renderTodas();
+  else if(currentTab==='relatorio')renderRelatorio();
+}
+
+async function toggleDone(id,e){
+  if(READONLY)return;
+  const t=tasks.find(x=>x.id===id);if(!t)return;
+  t.done_today=!isDoneToday(t);
+  t.last_done_date=t.done_today?todayStr():'';
+  render();
+  await Promise.all([upsert(t),saveHistorico(t,t.done_today)]);
+}
+
+function selectEndOpt(opt){
+  endOpt=opt;
+  document.getElementById('end-opt-never').classList.toggle('selected',opt==='never');
+  document.getElementById('end-opt-date').classList.toggle('selected',opt==='date');
+  document.getElementById('inp-enddate').style.display=opt==='date'?'block':'none';
+}
+
+function toggleFields(){
+  const type=document.getElementById('inp-type').value;
+  document.getElementById('field-date').style.display=type==='once'?'block':'none';
+  document.getElementById('field-days').style.display=type==='weekly'?'block':'none';
+  document.getElementById('field-recurrence-start').style.display=['biweekly'].includes(type)?'block':'none';
+  document.getElementById('field-monthday').style.display=type==='monthly'?'block':'none';
+  document.getElementById('field-yeardate').style.display=type==='yearly'?'block':'none';
+  document.getElementById('field-enddate').style.display=type==='once'?'none':'block';
+}
+
+function getSelectedDays(){return[...document.querySelectorAll('.day-btn.selected')].map(b=>parseInt(b.dataset.day));}
+function setSelectedDays(days){document.querySelectorAll('.day-btn').forEach(b=>{b.classList.toggle('selected',days.includes(parseInt(b.dataset.day)));});}
+document.querySelectorAll('.day-btn').forEach(b=>{b.addEventListener('click',()=>b.classList.toggle('selected'));});
+
+function openSheet(id){
+  if(READONLY)return;
+  editingId=id||null;
+  const del=document.getElementById('btn-delete');
+  if(id){
+    const t=tasks.find(x=>x.id===id);
+    document.getElementById('sheet-title').textContent='Editar tarefa';
+    document.getElementById('inp-text').value=t.text;
+    document.getElementById('inp-type').value=t.type;
+    document.getElementById('inp-date').value=t.date||'';
+    document.getElementById('inp-time').value=t.time||'';
+    document.getElementById('inp-prio').value=t.priority||'normal';
+    document.getElementById('inp-rec-start').value=t.recurrenceStart||'';
+    document.getElementById('inp-monthday').value=t.recurrenceDay||'';
+    document.getElementById('inp-yeardate').value=t.recurrenceStart||'';
+    setSelectedDays(t.daysOfWeek||[]);
+    if(t.endDate){selectEndOpt('date');document.getElementById('inp-enddate').value=t.endDate;}
+    else selectEndOpt('never');
+    del.style.display='block';
+  }else{
+    document.getElementById('sheet-title').textContent='Nova tarefa';
+    document.getElementById('inp-text').value='';
+    document.getElementById('inp-type').value='once';
+    document.getElementById('inp-date').value=todayStr();
+    document.getElementById('inp-time').value='';
+    document.getElementById('inp-prio').value='normal';
+    document.getElementById('inp-rec-start').value=todayStr();
+    document.getElementById('inp-monthday').value='';
+    document.getElementById('inp-yeardate').value='';
+    setSelectedDays([]);
+    selectEndOpt('never');
+    document.getElementById('inp-enddate').value='';
+    del.style.display='none';
+  }
+  toggleFields();
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('sheet').classList.add('open');
+  setTimeout(()=>document.getElementById('inp-text').focus(),300);
+}
+
+function closeSheet(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('sheet').classList.remove('open');
+}
+
+async function saveTask(){
+  const text=document.getElementById('inp-text').value.trim();if(!text)return document.getElementById('inp-text').focus();
+  const type=document.getElementById('inp-type').value;
+  if(type==='weekly'&&getSelectedDays().length===0){alert('Selecione pelo menos um dia da semana.');return;}
+  const btn=document.getElementById('btn-save');btn.disabled=true;btn.textContent='Salvando...';
+  const date=type==='once'?document.getElementById('inp-date').value:'';
+  const daysOfWeek=type==='weekly'?getSelectedDays():[];
+  const time=document.getElementById('inp-time').value;
+  const endDate=type!=='once'&&endOpt==='date'?document.getElementById('inp-enddate').value:'';
+  const priority=document.getElementById('inp-prio').value;
+  let recurrenceStart='',recurrenceDay=null,recurrenceMonth=null;
+  if(type==='biweekly')recurrenceStart=document.getElementById('inp-rec-start').value;
+  if(type==='monthly'){recurrenceDay=parseInt(document.getElementById('inp-monthday').value)||null;}
+  if(type==='yearly'){
+    const yd=document.getElementById('inp-yeardate').value;
+    if(yd){recurrenceStart=yd;recurrenceDay=dayOfDate(yd);recurrenceMonth=monthOfDate(yd);}
+  }
+  const id=editingId||genId();
+  const ex=tasks.find(x=>x.id===id);
+  const t={id,text,type,date,daysOfWeek,time,endDate,recurrenceStart,recurrenceDay,recurrenceMonth,priority,done_today:ex?.done_today||false,last_done_date:ex?.last_done_date||''};
+  if(editingId){const i=tasks.findIndex(x=>x.id===id);tasks[i]=t;}else tasks.push(t);
+  closeSheet();render();await upsert(t);
+  btn.disabled=false;btn.textContent='Salvar';
+}
+
+async function deleteCurrentTask(){
+  if(!editingId)return;const id=editingId;
+  tasks=tasks.filter(t=>t.id!==id);closeSheet();render();await remove(id);
+}
+
+function openAction(id){
+  actionId=id;
+  const t=tasks.find(x=>x.id===id);
+  document.getElementById('action-toggle').textContent=isDoneToday(t)?'↩  Marcar como pendente':'✓  Marcar como feita';
+  document.getElementById('action-sheet').classList.add('open');
+}
+function closeAction(){document.getElementById('action-sheet').classList.remove('open');}
+function editFromAction(){closeAction();openSheet(actionId);}
+function toggleFromAction(){closeAction();toggleDone(actionId);}
+async function deleteFromAction(){const id=actionId;closeAction();tasks=tasks.filter(t=>t.id!==id);render();await remove(id);}
+
+function switchTab(tab,el){
+  currentTab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');render();
+}
+
+document.getElementById('inp-text').addEventListener('keydown',e=>{if(e.key==='Enter')saveTask();});
+
+const d=new Date();
+const WDS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+document.getElementById('today-date').textContent=`${WDS[d.getDay()]}, ${d.getDate()} de ${MONTHS[d.getMonth()]}`;
+
+loadAll();
+</script>
+</body>
+</html>
