@@ -774,6 +774,7 @@ function render(){
 }
 
 async function toggleDone(id,dateStr){
+  console.log('toggleDone called', id, dateStr);
   if(READONLY)return;
   const t=tasks.find(x=>x.id===id);if(!t)return;
   const ds=dateStr||todayStr();
