@@ -613,13 +613,13 @@ function badge(t){
 }
 
 function taskHTML(t,dateStr){
-  const done=isDoneForDate(t,dateStr||todayStr());
+  const ds=dateStr||todayStr();
+  const done=isDoneForDate(t,ds);
   const prio=t.priority==='alta'?'<span class="prio-alta">▲ alta</span>':'';
   const timeBadge=t.time?`<span class="badge badge-time">🕐 ${fmtTime(t.time)}</span>`:'';
   const endBadge=t.endDate&&t.type!=='once'?`<span class="badge badge-enddate">até ${fmtDate(t.endDate)}</span>`:'';
-  const canClick=!READONLY||false;
   const editBtn=READONLY?'':'<button class="task-edit-btn" onclick="event.stopPropagation();openAction(\''+t.id+'\')">···</button>';
-  return`<div class="task-item ${done?'done':''} ${!READONLY?'clickable':''}" ${!READONLY?`onclick="toggleDone('${t.id}',event)"`:''} oncontextmenu="${!READONLY?`openAction('${t.id}');`:``}return false;">
+  return`<div class="task-item ${done?'done':''} ${!READONLY?'clickable':''}" ${!READONLY?`onclick="toggleDone('${t.id}','${ds}')"`:''}  oncontextmenu="${!READONLY?`openAction('${t.id}');`:``}return false;">
     <div class="checkbox ${done?'checked':''}"><div class="checkmark"></div></div>
     <div class="task-info">
       <div class="task-text">${t.text}</div>
@@ -773,17 +773,24 @@ function render(){
   else if(currentTab==='lixeira')renderLixeira();
 }
 
-async function toggleDone(id,e){
+async function toggleDone(id,dateStr){
   if(READONLY)return;
   const t=tasks.find(x=>x.id===id);if(!t)return;
-  // For overdue once tasks, marking as done closes them out
-  if(t.type==='once'&&t.date&&t.date<todayStr()&&!isDoneToday(t)){
-    t.done_today=true;
-    t.last_done_date=todayStr();
+  const ds=dateStr||todayStr();
+  // For past dates (overdue or history), just record in historico and re-render
+  if(ds<todayStr()){
+    const alreadyDone=historico.find(h=>h.tarefa_id===t.id&&h.data===ds&&h.concluida);
+    if(alreadyDone){
+      // Unmark: remove from historico locally
+      historico=historico.filter(h=>!(h.tarefa_id===t.id&&h.data===ds&&h.concluida));
+    } else {
+      historico.push({id:t.id+'_'+ds,tarefa_id:t.id,tarefa_text:t.text,data:ds,concluida:true});
+      await saveHistoricoForDate(t,true,ds);
+    }
     render();
-    await Promise.all([upsert(t),saveHistoricoForDate(t,true,t.date)]);
     return;
   }
+  // Today
   t.done_today=!isDoneToday(t);
   t.last_done_date=t.done_today?todayStr():'';
   render();
