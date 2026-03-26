@@ -492,8 +492,12 @@ function renderAtrasadas(){
   document.getElementById('stat-pending').textContent='—';
   document.getElementById('alert-container').innerHTML='';
 
-  // Tarefas pontuais com data passada não concluídas
-  const overdueOnce=tasks.filter(t=>t.type==='once'&&t.date&&t.date<todayStr());
+  // Tarefas pontuais com data passada não concluídas no historico
+  const overdueOnce=tasks.filter(t=>{
+    if(t.type!=='once'||!t.date||t.date>=todayStr())return false;
+    const doneInHistory=historico.find(h=>h.tarefa_id===t.id&&h.data===t.date&&h.concluida);
+    return!doneInHistory;
+  });
 
   // Tarefas recorrentes não concluídas ontem
   const yesterday=dateAddDays(todayStr(),-1);
@@ -774,7 +778,6 @@ function render(){
 }
 
 async function toggleDone(id,dateStr){
-  console.log('toggleDone called', id, dateStr);
   if(READONLY)return;
   const t=tasks.find(x=>x.id===id);if(!t)return;
   const ds=dateStr||todayStr();
