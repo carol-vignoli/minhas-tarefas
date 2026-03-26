@@ -423,7 +423,7 @@ function isForDate(t,dateStr){
 }
 
 const isForToday=t=>isForDate(t,todayStr());
-const isOverdue=t=>t.type==='once'&&t.date&&t.date<todayStr()&&!isDoneToday(t);
+const isOverdue=t=>t.type==='once'&&t.date&&t.date<todayStr()&&!isDoneToday(t)&&!historico.find(h=>h.tarefa_id===t.id&&h.data===t.date&&h.concluida);
 
 async function closePreviousDay(prevDate, taskList){
   const prevEntries = historico.filter(h => h.data === prevDate);
@@ -776,10 +776,23 @@ function render(){
 async function toggleDone(id,e){
   if(READONLY)return;
   const t=tasks.find(x=>x.id===id);if(!t)return;
+  // For overdue once tasks, marking as done closes them out
+  if(t.type==='once'&&t.date&&t.date<todayStr()&&!isDoneToday(t)){
+    t.done_today=true;
+    t.last_done_date=todayStr();
+    render();
+    await Promise.all([upsert(t),saveHistoricoForDate(t,true,t.date)]);
+    return;
+  }
   t.done_today=!isDoneToday(t);
   t.last_done_date=t.done_today?todayStr():'';
   render();
   await Promise.all([upsert(t),saveHistorico(t,t.done_today)]);
+}
+
+async function saveHistoricoForDate(t,concluida,dateStr){
+  const id=t.id+'_'+dateStr;
+  try{await dbReq('POST','historico?on_conflict=id',{id,tarefa_id:t.id,tarefa_text:t.text,data:dateStr,concluida});}catch(e){}
 }
 
 function selectEndOpt(opt){
